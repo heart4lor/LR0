@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Parser {
     private static HashMap<String, ArrayList<Integer>> index = new HashMap<>();
@@ -28,8 +26,34 @@ public class Parser {
         }
     }
 
+    private static ArrayList<Item> getClosure(Item item) {
+        ArrayList<Item> items = new ArrayList<>();
+        Queue<Item> queue = new LinkedList<>();
+        queue.offer(item);
+        while(!queue.isEmpty()) {
+            Item now = queue.poll();
+            items.add(now);
+            int dot = now.getDot();
+            if(dot == now.getSecond().length())
+                continue;
+            char c = now.getSecond().charAt(dot);
+            if(Character.isUpperCase(c)) {
+                String first = String.valueOf(c);
+                for(int i: index.get(first)) {
+                    String second = grammars[i].getSecond();
+                    Item next = new Item(first, second, 0);
+                    if(next.getDot() < next.getSecond().length())
+                        queue.offer(next);
+                }
+            }
+        }
+        return items;
+    }
+
     public static void main(String[] args) {
         input();
+        Item item0 = new Item("B->b", 1);
+        System.out.println(getClosure(item0));
 //        output();
 
     }
