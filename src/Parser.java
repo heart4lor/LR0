@@ -34,7 +34,7 @@ public class Parser {
             Item now = queue.poll();
             items.add(now);
             int dot = now.getDot();
-            if(dot == now.getSecond().length())
+            if(dot >= now.getSecond().length())
                 continue;
             char c = now.getSecond().charAt(dot);
             if(Character.isUpperCase(c)) {
@@ -52,8 +52,24 @@ public class Parser {
 
     public static void main(String[] args) {
         input();
-        Item item0 = new Item("B->b", 1);
-        System.out.println(getClosure(item0));
+        Item item0 = new Item("S'->S", 0);
+        ArrayList<ArrayList<Item>> itemsGroup = new ArrayList<>(); // 项目集规范族
+        itemsGroup.add(getClosure(item0));
+        for(int i = 0; i < itemsGroup.size(); i++) {
+            ArrayList<Item> items = itemsGroup.get(i); // 项目集
+            for (Item now : items) { // 项目
+                if (now.hasNextDot()) {
+                    ArrayList<Item> nextItems = getClosure(now.nextDot());
+                    if (!itemsGroup.contains(nextItems))
+                    {
+                        itemsGroup.add(nextItems);
+//                        System.out.println(itemsGroup);
+                    }
+                }
+            }
+        }
+        System.out.println(itemsGroup);
+//        System.out.println(items.get(0));
 //        output();
 
     }

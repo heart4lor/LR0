@@ -1,16 +1,13 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class Item extends Grammar implements Cloneable {
     private int dot;
+    private int belong;
 
     Item(String line, int dot) {
         super(line);
         this.dot = dot;
     }
 
-    Item(Grammar grammar, int dot) {
+    private Item(Grammar grammar, int dot) {
         super(grammar.toString());
         this.dot = dot;
     }
@@ -20,11 +17,27 @@ public class Item extends Grammar implements Cloneable {
         this.dot = dot;
     }
 
-    private boolean nextDot() {
-        if(dot == getSecond().length()+1)
-            return false;
-        dot++;
-        return true;
+    boolean hasNextDot() {
+        return dot < getSecond().length();
+    }
+
+    Item nextDot() {
+        Item next = null;
+        try {
+            next = (Item) this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        assert next != null;
+        next.dot++;
+        return next;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if(object instanceof Item)
+            return this.toString().equals(object.toString());
+        return false;
     }
 
     int getDot() {
