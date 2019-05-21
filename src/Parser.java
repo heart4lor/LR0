@@ -13,6 +13,7 @@ public class Parser {
         System.out.print("请输入文法的数目：");
         int n = scanner.nextInt();
         scanner.nextLine();
+        System.out.println(String.format("请输入%d个文法：", n));
         for (int i = 1; i <= n; i++)
         {
             String line = scanner.nextLine();
