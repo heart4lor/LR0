@@ -42,7 +42,7 @@ public class Parser {
                 for(int i: index.get(first)) {
                     String second = grammars[i].getSecond();
                     Item next = new Item(first, second, 0);
-                    if(next.getDot() < next.getSecond().length())
+                    if(next.hasNextDot())
                         queue.offer(next);
                 }
             }
@@ -55,20 +55,27 @@ public class Parser {
         Item item0 = new Item("S'->S", 0);
         ArrayList<ArrayList<Item>> itemsGroup = new ArrayList<>(); // 项目集规范族
         itemsGroup.add(getClosure(item0));
+
+        ArrayList<Edge> DFA = new ArrayList<>(); // 初始化DFA
+
         for(int i = 0; i < itemsGroup.size(); i++) {
             ArrayList<Item> items = itemsGroup.get(i); // 项目集
             for (Item now : items) { // 项目
                 if (now.hasNextDot()) {
+                    char path = now.getSecond().charAt(now.getDot());
                     ArrayList<Item> nextItems = getClosure(now.nextDot());
-                    if (!itemsGroup.contains(nextItems))
+                    int index = itemsGroup.indexOf(nextItems);
+                    if (index == -1)
                     {
+                        index = itemsGroup.size();
                         itemsGroup.add(nextItems);
-//                        System.out.println(itemsGroup);
                     }
+                    DFA.add(new Edge(i, index, path));
                 }
             }
         }
-        System.out.println(itemsGroup);
+        System.out.println("项目集规范族:" + itemsGroup);
+        System.out.println("DFA:" + DFA);
 //        System.out.println(items.get(0));
 //        output();
 
