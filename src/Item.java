@@ -2,19 +2,10 @@ public class Item extends Grammar implements Cloneable {
     private int dot;
     private int belong;
 
-    Item(String line, int dot) {
+    Item(String line, int dot, int belong) {
         super(line);
         this.dot = dot;
-    }
-
-    private Item(Grammar grammar, int dot) {
-        super(grammar.toString());
-        this.dot = dot;
-    }
-
-    Item(String first, String second, int dot) {
-        super(first, second);
-        this.dot = dot;
+        this.belong = belong; // 所属grammar
     }
 
     boolean hasNextDot() {
@@ -53,9 +44,8 @@ public class Item extends Grammar implements Cloneable {
         return super.getFirst() + "->" + second;
     }
 
-    public static void main(String[] args) {
-        Grammar grammar = new Grammar("S->BB");
-        for(int i = 0; i < grammar.getSecond().length()+1; i++)
-            System.out.println(new Item(grammar, i));
+    int getBelong() {
+        return belong;
     }
+
 }
